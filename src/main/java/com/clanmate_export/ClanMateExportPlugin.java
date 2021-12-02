@@ -147,22 +147,29 @@ public class ClanMateExportPlugin extends Plugin {
         }
     }
 
-    /**
+     /**
      * Sets clan info
      */
     private void setClanInfo() {
         //Gets and sets clan count
-        Widget memberCounterWidget = this.client.getWidget(701, 3);
+        Widget tab = this.client.getWidget(701, 1);
+        if (tab == null || tab.getChildren() == null || tab.getChildren().length < 3) return;
+        Widget memberCounterWidget = tab.getChild(2);
         if (memberCounterWidget != null) {
             if (memberCounterWidget.getText() != null) {
                 String clanSizeText = Text.removeTags(memberCounterWidget.getText());
-                if (clanSizeText.contains("Size:")) {
-                    this.clanMemberCount = Integer.parseInt(clanSizeText.replace("Size: ", ""));
+                try {
+                    this.clanMemberCount = Integer.parseInt(clanSizeText);
+                } catch (Exception e) {
                 }
-
-
             }
         }
+        //Gets and sets clan name
+        Widget clanNameWidget = tab.getChild(0);
+        if (clanNameWidget != null) {
+            this.clanName = Text.removeTags(clanNameWidget.getText());
+        }
+    }
         //Gets and sets clan name
         Widget clanNameWidget = this.client.getWidget(701, 1);
         if (clanNameWidget != null) {
